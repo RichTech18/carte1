@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>À cœur ouvert</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,500;1,7..72,600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#e6e9e1;
+  --surface:#fbfaf6;
+  --ink:#1f2a24;
+  --muted:#5f6b63;
+  --line:#cdd3c8;
+  --pine:#1d3a30;
+  --brass:#c9a24a;
+  --back-ink:#f3ecd9;
+  --meadow:#56732f; --meadow-ink:#48622a;
+  --lake:#2b5874;   --lake-ink:#24506a;
+  --wine:#7b2b3c;   --wine-ink:#7b2b3c;
+  --leather:#8c5f2a;--leather-ink:#7a521f;
+  --plum:#5b2d5e;   --plum-ink:#5b2d5e;
+  --special:#f5efe1;
+  --shadow:0 22px 40px -20px rgba(20,40,30,.55), 0 4px 10px -4px rgba(20,40,30,.2);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#121a16;
+    --surface:#1d2722;
+    --ink:#ece8dc;
+    --muted:#a5ada4;
+    --line:#33403a;
+    --pine:#22443a;
+    --brass:#d4b062;
+    --meadow:#4b6529; --meadow-ink:#b3cf86;
+    --lake:#264f68;   --lake-ink:#9cc6e0;
+    --wine:#6e2636;   --wine-ink:#eaa0b0;
+    --leather:#7a5223;--leather-ink:#e2b97d;
+    --plum:#4e2752;   --plum-ink:#dcaadf;
+    --special:#2a2a20;
+    --shadow:0 22px 40px -18px rgba(0,0,0,.7), 0 4px 10px -4px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#121a16; --surface:#1d2722; --ink:#ece8dc; --muted:#a5ada4; --line:#33403a;
+  --pine:#22443a; --brass:#d4b062;
+  --meadow:#4b6529; --meadow-ink:#b3cf86;
+  --lake:#264f68;   --lake-ink:#9cc6e0;
+  --wine:#6e2636;   --wine-ink:#eaa0b0;
+  --leather:#7a5223;--leather-ink:#e2b97d;
+  --plum:#4e2752;   --plum-ink:#dcaadf;
+  --special:#2a2a20;
+  --shadow:0 22px 40px -18px rgba(0,0,0,.7), 0 4px 10px -4px rgba(0,0,0,.4);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*,*::before,*::after{box-sizing:border-box;}
+body{
+  margin:0; min-height:100%;
+  background:var(--bg); color:var(--ink);
+  font-family:"Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  --deck:var(--meadow); --deck-ink:var(--meadow-ink);
+}
+body[data-deck="decouverte"]{--deck:var(--meadow);--deck-ink:var(--meadow-ink);}
+body[data-deck="profondeur"]{--deck:var(--lake);--deck-ink:var(--lake-ink);}
+body[data-deck="complicite"]{--deck:var(--wine);--deck-ink:var(--wine-ink);}
+body[data-deck="melange"]{--deck:var(--leather);--deck-ink:var(--leather-ink);}
+body[data-deck="intimite"]{--deck:var(--plum);--deck-ink:var(--plum-ink);}
+
+.wrap{max-width:460px; margin:0 auto; padding:20px 18px 32px; display:flex; flex-direction:column; gap:18px;}
+
+header{display:flex; align-items:flex-start; justify-content:space-between; gap:12px;}
+h1{
+  font-family:"Literata", Georgia, "Times New Roman", serif;
+  font-style:italic; font-weight:600; font-size:2rem; line-height:1.05;
+  margin:0; letter-spacing:-.01em;
+}
+.sub{margin:6px 0 0; color:var(--muted); font-size:.92rem;}
+
+.rules{font-size:.92rem;}
+.rules summary{
+  list-style:none; cursor:pointer; color:var(--ink);
+  border:1.5px solid var(--line); border-radius:999px; padding:7px 14px;
+  font-weight:500; white-space:nowrap; background:var(--surface);
+}
+.rules summary::-webkit-details-marker{display:none;}
+.rules[open] summary{border-color:var(--deck-ink);}
+.rules-panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:16px;
+  padding:14px 16px; color:var(--ink); line-height:1.5;
+}
+.rules-panel ul{margin:0; padding-left:1.1em;}
+.rules-panel li+li{margin-top:6px;}
+
+.decks{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+.chip{
+  appearance:none; font:inherit; color:var(--ink); text-align:left; cursor:pointer;
+  background:var(--surface); border:1.5px solid var(--line); border-radius:14px;
+  padding:10px 12px; display:flex; flex-direction:column; gap:2px;
+  transition:border-color .2s, box-shadow .2s;
+}
+.chip .nm{font-weight:600; font-size:.98rem;}
+.chip .ds{font-size:.8rem; color:var(--muted);}
+.chip.decouverte{--c:var(--meadow-ink);}
+.chip.profondeur{--c:var(--lake-ink);}
+.chip.complicite{--c:var(--wine-ink);}
+.chip.melange{--c:var(--leather-ink);}
+.chip.intimite{--c:var(--plum-ink); grid-column:1 / -1;}
+.chip[aria-pressed="true"]{border-color:var(--c); box-shadow:inset 0 0 0 1.5px var(--c);}
+.chip[aria-pressed="true"] .nm{color:var(--c);}
+.chip:focus-visible, button:focus-visible, .card:focus-visible, .rules summary:focus-visible{
+  outline:3px solid var(--brass); outline-offset:3px;
+}
+
+.stage{display:flex; justify-content:center; padding:10px 0 4px; perspective:1400px;}
+.deckwrap{position:relative; width:min(100%, 320px, calc(54vh * 5 / 7)); aspect-ratio:5/7;}
+.layer{position:absolute; inset:0; border-radius:20px; background:var(--deck); transition:opacity .3s;}
+.l1{transform:rotate(-4deg) translate(-7px,7px); opacity:.45;}
+.l2{transform:rotate(3.5deg) translate(7px,5px); opacity:.28;}
+.deckwrap[data-left="few"] .l2, .deckwrap[data-left="none"] .layer{opacity:0;}
+
+.card{
+  position:absolute; inset:0; transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.2,.75,.2,1); cursor:pointer; border-radius:20px;
+}
+.card.flipped{transform:rotateY(180deg); cursor:default;}
+.face{
+  position:absolute; inset:0; border-radius:20px; overflow:hidden;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden; box-shadow:var(--shadow);
+}
+
+/* Dos de carte : motif de couverture de cheval tissée */
+.back{
+  background-color:var(--deck);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(243,236,217,.0) 0 18px, rgba(243,236,217,.16) 18px 21px, rgba(243,236,217,0) 21px 30px, rgba(0,0,0,.12) 30px 34px),
+    repeating-linear-gradient(90deg, rgba(243,236,217,.0) 0 18px, rgba(243,236,217,.16) 18px 21px, rgba(243,236,217,0) 21px 30px, rgba(0,0,0,.12) 30px 34px);
+  color:var(--back-ink);
+  display:flex; align-items:center; justify-content:center;
+}
+.back::before{
+  content:""; position:absolute; inset:11px; border-radius:13px;
+  border:1.5px solid var(--brass); opacity:.85;
+}
+.emblem{
+  position:relative; width:62%; aspect-ratio:1; border-radius:50%;
+  background:var(--deck); border:1.5px solid var(--brass);
+  box-shadow:0 0 0 6px var(--deck), 0 0 0 7.5px rgba(212,176,98,.6);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:4px;
+}
+.emblem .heart{font-size:1.9rem; line-height:1; color:var(--brass);}
+.emblem .ttl{font-family:"Literata", Georgia, serif; font-style:italic; font-weight:600; font-size:1.2rem;}
+.emblem .dk{font-size:.82rem; opacity:.85;}
+.hint{position:absolute; bottom:24px; left:0; right:0; text-align:center; font-size:.85rem; color:var(--back-ink); opacity:.9;}
+
+.front{
+  transform:rotateY(180deg);
+  background:var(--surface); border:1px solid var(--line);
+  padding:24px 22px 20px; display:flex; flex-direction:column; justify-content:space-between;
+}
+.front::before{content:""; position:absolute; left:0; right:0; top:0; height:7px; background:var(--deck);}
+.front.special{background:var(--special);}
+.front.special::before{background:var(--brass);}
+.tag{font-weight:600; font-size:.92rem; color:var(--deck-ink);}
+.q{
+  font-family:"Literata", Georgia, "Times New Roman", serif; font-weight:500;
+  font-size:clamp(1.18rem, 5.6vw, 1.52rem); line-height:1.36; margin:0;
+  text-wrap:balance; color:var(--ink);
+}
+.q.long{font-size:clamp(1.04rem, 4.8vw, 1.3rem);}
+.front.special .q{font-style:italic;}
+.fbot{display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:.82rem;}
+.fbot .orn{color:var(--brass); font-size:1.1rem;}
+
+.left{margin:0; text-align:center; color:var(--muted); font-size:.9rem;}
+
+.actions{display:grid; grid-template-columns:1fr; gap:8px;}
+.actions.two{grid-template-columns:1fr auto;}
+button.primary, button.secondary{
+  font:inherit; font-weight:600; font-size:1.02rem; border-radius:14px; padding:15px 18px; cursor:pointer;
+}
+button.primary{background:var(--deck); color:var(--back-ink); border:0;}
+button.primary:active{transform:translateY(1px);}
+button.secondary{background:var(--surface); color:var(--ink); border:1.5px solid var(--line);}
+button[hidden]{display:none;}
+[hidden]{display:none !important;}
+
+.gate{
+  position:relative; overflow:hidden; text-align:center;
+  background:var(--surface); border:1px solid var(--line); border-radius:20px;
+  padding:26px 20px 18px; display:flex; flex-direction:column; gap:14px; box-shadow:var(--shadow);
+}
+.gate::before{content:""; position:absolute; left:0; right:0; top:0; height:7px; background:var(--deck);}
+.gate-title{margin:4px 0 0; font-family:"Literata", Georgia, "Times New Roman", serif; font-style:italic; font-weight:600; font-size:1.55rem; color:var(--deck-ink);}
+.gate-text{margin:0; line-height:1.55;}
+.gate-hint{margin:0; font-size:.86rem; color:var(--muted);}
+.gate-btns{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+.consent{
+  font:inherit; font-weight:600; font-size:.98rem; padding:14px 8px; border-radius:14px; cursor:pointer;
+  background:transparent; color:var(--deck-ink); border:1.5px solid var(--deck-ink);
+  transition:background .2s, color .2s;
+}
+.consent[aria-pressed="true"]{background:var(--deck); border-color:var(--deck); color:var(--back-ink);}
+.consent:focus-visible{outline:3px solid var(--brass); outline-offset:3px;}
+
+.reset{
+  align-self:center; background:none; border:0; color:var(--muted); font:inherit; font-size:.88rem;
+  text-decoration:underline; text-underline-offset:3px; cursor:pointer; padding:6px;
+}
+.reset.armed{color:var(--wine-ink); font-weight:600;}
+
+@media (prefers-reduced-motion: reduce){
+  .card{transition:none;}
+}
+</style>
+</head>
+<body data-deck="decouverte">
+<div class="wrap">
+  <header>
+    <div>
+      <h1>À cœur ouvert</h1>
+      <p class="sub">Une carte, une question, une réponse.</p>
+    </div>
+    <details class="rules" id="rules">
+      <summary>Règles</summary>
+    </details>
+  </header>
+
+  <div class="rules-panel" id="rulesPanel" hidden>
+    <ul>
+      <li>Une personne tire une carte, l’autre la lit à voix haute.</li>
+      <li>On peut passer n’importe quelle carte, sans se justifier.</li>
+      <li>On peut toujours renvoyer la question : « Et toi ? »</li>
+      <li>Les cartes ✨ sont des cartes spéciales.</li>
+      <li>Les paquets vont du plus léger au plus intime : à vous de choisir le moment.</li>
+      <li>Le paquet Intimité ne s’ouvre que si vous êtes d’accord tous les deux.</li>
+    </ul>
+  </div>
+
+  <nav class="decks" aria-label="Choisir un paquet">
+    <button class="chip decouverte" data-deck="decouverte" aria-pressed="true"><span class="nm">🌿 Découverte</span><span class="ds ct"></span></button>
+    <button class="chip profondeur" data-deck="profondeur" aria-pressed="false"><span class="nm">🌊 Profondeur</span><span class="ds ct"></span></button>
+    <button class="chip complicite" data-deck="complicite" aria-pressed="false"><span class="nm">🌹 Complicité</span><span class="ds ct"></span></button>
+    <button class="chip melange" data-deck="melange" aria-pressed="false"><span class="nm">🎲 Mélange</span><span class="ds ct"></span></button>
+    <button class="chip intimite" data-deck="intimite" aria-pressed="false"><span class="nm">🕯️ Intimité</span><span class="ds ct"></span></button>
+  </nav>
+
+  <section class="gate" id="gate" hidden aria-labelledby="gateTitle">
+    <p class="gate-title" id="gateTitle">Paquet Intimité</p>
+    <p class="gate-text">Des questions plus sensuelles, jamais crues. Ce paquet s’ouvre seulement si vous êtes d’accord tous les deux, et vous pouvez changer de paquet à tout moment.</p>
+    <p class="gate-hint">Chacun appuie sur un bouton.</p>
+    <div class="gate-btns">
+      <button class="consent" aria-pressed="false">Je suis d’accord</button>
+      <button class="consent" aria-pressed="false">Je suis d’accord</button>
+    </div>
+    <button class="reset" id="gateBack">Pas maintenant</button>
+  </section>
+
+  <div class="stage" id="stage">
+    <div class="deckwrap" id="deckwrap" data-left="many">
+      <div class="layer l2"></div>
+      <div class="layer l1"></div>
+      <div class="card" id="card" role="button" tabindex="0" aria-label="Tirer une carte">
+        <div class="face back">
+          <div class="emblem">
+            <span class="heart">♡</span>
+            <span class="ttl">À cœur ouvert</span>
+            <span class="dk" id="backDeck">Découverte</span>
+          </div>
+          <span class="hint">Touche pour tirer une carte</span>
+        </div>
+        <div class="face front" id="front">
+          <span class="tag" id="tag"></span>
+          <p class="q" id="q" aria-live="polite"></p>
+          <div class="fbot"><span id="num"></span><span class="orn">♡</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="left" id="left"></p>
+
+  <div class="actions" id="actions">
+    <button class="primary" id="draw">Tirer une carte</button>
+    <button class="secondary" id="pass" hidden>Passer</button>
+  </div>
+
+  <button class="reset" id="reset">Remettre toutes les cartes</button>
+</div>
+
+<script>
+const RAW = {
+  decouverte: [
+    "Qu’est-ce qui t’a fait sourire cette semaine ?",
+    "Quel petit plaisir du quotidien ne pourrais-tu jamais abandonner ?",
+    "Si tu avais une journée entièrement libre demain, tu en ferais quoi ?",
+    "Quel est le dernier truc qui t’a vraiment fait rire ?",
+    "Quelle musique écoutes-tu quand tu es seule en voiture ?",
+    "Quelle chanson te met de bonne humeur à coup sûr ?",
+    "Quel livre, film ou série t’a marquée, et pourquoi ?",
+    "Qu’est-ce que tu lis, regardes ou écoutes en ce moment ?",
+    "Quel est ton plat réconfort ?",
+    "Tu aimes cuisiner ? C’est quoi ta spécialité ?",
+    "Quel est ton endroit préféré au monde ?",
+    "Quel voyage t’a le plus marquée ?",
+    "Où rêves-tu d’aller, et qu’est-ce qui t’attire là-bas ?",
+    "Quel paysage te donne l’impression d’être chez toi ?",
+    "Quelle saison te ressemble le plus ?",
+    "Qu’est-ce qui éveille ta curiosité en ce moment ?",
+    "Qu’as-tu appris récemment qui t’a passionnée ?",
+    "Qu’aimerais-tu apprendre si tu avais le temps ?",
+    "Tu as un talent caché que peu de gens connaissent ?",
+    "Quelle activité te fait complètement oublier l’heure ?",
+    //"Qu’est-ce que tu adorais faire enfant ? Tu le fais encore ?",
+    "Quel est le plus beau cadeau que tu aies reçu ?",
+    //"Qu’est-ce qui te fait craquer à coup sûr : une odeur, une saveur, un objet ?",
+    "Ta journée idéale commence comment ?",
+    "Plutôt soirée entre amies, dîner à deux ou soirée seule sous un plaid ?",
+    "Qu’est-ce qui te fait te sentir vivante ?",
+    "Qu’est-ce que tu ne te lasses jamais de faire ?",
+    "Qu’est-ce qui te remet de bonne humeur quand la journée a mal commencé ?",
+    "Tu gardes des objets qui comptent pour toi ? Lequel sauverais-tu en premier ?",
+    "Quelle est la meilleure décision que tu aies prise cette année ?",
+    "Quelle est la dernière chose que tu as faite pour la première fois ?",
+    "Qu’y a-t-il sur ta liste de choses à faire au moins une fois dans ta vie ?",
+    "Avec une année sabbatique offerte, tu en ferais quoi ?",
+    "Si tu ouvrais un lieu à toi, ce serait quoi : un gîte, un ranch, un café… ?",
+    "Si tu organisais une fête rien que pour toi, à quoi ressemblerait-elle ?",
+    "Il y a une histoire derrière le nom de ton chien ?",
+    "Quelle est la bêtise la plus mémorable de ton chien ?",
+    "Comment est née ta passion pour les chevaux ?",
+    "Si Pagaille était une personne, quel caractère aurait-elle ?",
+    "Quel serait ton itinéraire de rêve à faire à cheval ?",
+    "Raconte-moi l’événement que tu as organisé dont tu es la plus fière.",
+    "Quel est le pire imprévu que tu aies dû gérer à la dernière minute ?",
+    "Dans ton groupe d’amies, tu es toujours celle qui organise ?",
+    "Tu es aussi organisée dans ta vie perso, ou c’est le chaos à la maison ?",
+    "Ton métier, tu l’as choisi ou c’est lui qui t’a choisie ?",
+    "Si tu pouvais changer de métier du jour au lendemain, tu ferais quoi ?",
+    //{s:1, t:"Montre-moi ta photo préférée dans ton téléphone, et raconte-moi l’histoire derrière."},
+    {s:1, t:"Fais-moi écouter une chanson que tu aimes, et dis-moi pourquoi."},
+    {s:1, t:"Réponds en trois mots seulement : comment s’est passée ta semaine ?"},
+    //{s:1, t:"Retournement : c’est toi qui me poses une question, celle que tu veux."}
+  ],
+  profondeur: [
+    "Qu’est-ce que tu as envie de vivre dans les prochaines années ?",
+    "Quel rêve n’as-tu pas encore réalisé ?",
+    "Qu’aimerais-tu avoir plus dans ta vie, et moins ?",
+    "Si tu étais sûre de ne pas échouer, qu’oserais-tu entreprendre ?",
+    "Qu’est-ce que tu t’es promis de faire un jour ?",
+    //"Quel rêve d’enfant as-tu gardé, ou abandonné ?",
+    "Un projet personnel te tient à cœur en ce moment ?",
+    "Comment imagines-tu ta vie dans dix ans ?",
+    "Qu’est-ce qui te passionne au point d’en parler pendant des heures ?",
+    "Qu’est-ce qui te vide le plus d’énergie, et qu’est-ce qui t’en redonne ?",
+    "Qu’est-ce qui te rend profondément heureuse ?",
+    //"Qu’est-ce qui peut t’émouvoir aux larmes ?",
+    "Qu’est-ce qui te fait te sentir libre ?",
+    "Comment te décrirais-tu en trois mots ?",
+    //"Quelle petite fille étais-tu ?",
+    //"Raconte-moi un souvenir d’enfance qui te fait encore sourire.",
+    "Qui t’a le plus influencée dans ta vie ?",
+    //"Qui, dans ta famille, te ressemble le plus ?",
+    "Quelle partie de toi les gens voient-ils rarement ?",
+    "Qu’aimerais-tu que les gens comprennent mieux sur toi ?",
+    "Les gens te voient plutôt introvertie ou extravertie ? Et toi, qu’en penses-tu ?",
+    "De quoi es-tu fière dans la femme que tu es devenue ?",
+    "Qu’est-ce que tu comprends aujourd’hui que tu ne comprenais pas il y a dix ans ?",
+    "Que dirais-tu à la femme que tu étais à 34 ans ?",
+    "Quelle expérience a le plus changé ta façon de voir les choses ?",
+    "Qu’est-ce qui a été le plus difficile à conquérir dans ta vie ?",
+    "Qu’est-ce que les chevaux t’ont appris sur toi ?",
+    "C’est quoi, pour toi, une vie réussie ?",
+    "Qu’est-ce qui te donne confiance en quelqu’un ?",
+    "Quelle qualité admires-tu le plus chez les autres ?",
+    "Qu’est-ce qui te met vraiment en colère ?",
+    "Y a-t-il quelque chose que tu as arrêté de faire juste pour plaire aux autres ?",
+    "Tu crois au destin, ou on construit tout soi-même ?",
+    "Comment sais-tu que tu as atteint ta limite et qu’il te faut du temps seule ?",
+    "À quoi ressemble ta soirée idéale pour recharger les batteries ?",
+    "Tu donnes beaucoup aux autres… Mais qui prend soin de toi ?",
+    "Tu as appris avec le temps à dire non ?",
+    "Parle-moi de tes amies les plus proches : qui sont-elles ?",
+    "Qu’est-ce que tes amies t’apportent que personne d’autre ne t’apporte ?",
+    "Qu’est-ce qu’il faut faire pour passer l’examen de tes amies ?",
+    "Comment es-tu arrivée à ton activité d’accompagnatrice ?",
+    "Qu’est-ce que ton rôle d’accompagnatrice t’apporte, à toi ?",
+    "Qu’est-ce que les gens ne comprennent pas sur ton rôle d’accompagnatrice ?",
+    "Qu’est-ce que l’accompagnement t’a appris sur la dignité et le besoin de contact ?",
+    "L’accompagnement, c’est parfois lourd émotionnellement ? Comment te ressources-tu après ?",
+    "Comment te sens-tu dans ta vie en ce moment, honnêtement ?",
+    "Si ta vie en ce moment était une saison, ce serait laquelle ?",
+    "Qu’as-tu besoin d’entendre en ce moment ?",
+    {s:1, t:"Retournement : c’est toi qui me poses une question, celle que tu veux."},
+    {s:1, t:"Cette fois, on répond tous les deux à la prochaine carte."}
+  ],
+  complicite: [
+    "Qu’est-ce que ces dernières années t’ont appris sur toi ?",
+    "Ta façon d’aimer a changé ces dernières années ?",
+    "De quoi as-tu le plus besoin aujourd’hui : de légèreté, de profondeur, de temps ?",
+    "Est-ce qu’il y a quelqu’un dans ta vie en ce moment ?",
+    "Avec qui te sens-tu le plus toi-même ?",
+    "Qu’est-ce qui te fait te sentir en sécurité avec quelqu’un ?",
+    "Quels signaux te font te refermer ?",
+    "Tu m’as dit qu’il y a quelque chose avec les femmes que tu ne trouves pas chez un homme : c’est quoi exactement ?",
+    "Chez un homme, qu’est-ce que tu apprécies que tu ne trouves pas ailleurs ?",
+    "Qu’est-ce qu’un homme a déjà fait qui t’a vraiment touchée ?",
+    //"Quand as-tu compris que tu étais bisexuelle, et comment l’as-tu vécu ?",
+    "Pour toi, c’est quoi la vraie tendresse ?",
+    "Comment fais-tu la part entre ton rôle d’accompagnatrice et ta vie intime à toi ?",
+    "Comment aimes-tu qu’on prenne soin de toi ?",
+    "Qu’est-ce que tu ne t’autorises pas encore ?",
+    "Qu’est-ce qui te fait peur aujourd’hui ?",
+    "Qu’est-ce qui te fait te sentir vraiment écoutée ?",
+    "Quel est le plus beau compliment qu’on t’ait fait ?",
+    "Qu’est-ce qui te séduit chez quelqu’un, au-delà du physique ?",
+    "À quoi ressemblerait ton premier rendez-vous idéal ?",
+    "Grands gestes romantiques ou petites attentions du quotidien ?",
+    "Qu’est-ce qu’on ne remarque pas tout de suite chez toi, mais qui vaut le coup d’être découvert ?",
+    "Tu as parlé de moi à tes amies ?",
+    "Qu’est-ce qui t’a surprise chez moi ?",
+    "Qu’as-tu besoin de savoir sur moi pour te sentir à l’aise ?",
+    "À quel rythme aimes-tu que les choses avancent ?",
+    "Comment imagines-tu une relation aujourd’hui : classique, libre, à ta façon ?",
+    //"Tu me laisserais t’accompagner un jour en balade, même si je dois marcher à côté du cheval ?",
+    "Qu’est-ce qui t’a donné envie de discuter avec moi ?",
+    "Qu’est-ce que tu aimerais qu’on fasse ensemble, un jour ?",
+    "Qu’est-ce que je devrais savoir de toi et que je n’ai pas encore pensé à demander ?",
+    "Il y a une question que tu aimerais que je te pose ?",
+    {s:1, t:"Dis-moi ce que tu as pensé de moi la toute première fois qu’on s’est vus."},
+    //{s:1, t:"Retournement : pose-moi la question que tu n’as pas encore osé me poser."},
+    {s:1, t:"À toi : qu’as-tu envie de savoir sur moi ? Je réponds à tout."}
+  ],
+  intimite: [
+    "Qu’est-ce qui éveille vraiment ton désir : un regard, des mots, une ambiance, une personne ?",
+    "À quel moment sais-tu que tu as envie de quelqu’un ?",
+    "Ton désir arrive d’un coup, ou il se construit doucement ?",
+    "Qu’est-ce qui te fait te sentir désirée ?",
+    //"Qu’est-ce qui t’éteint instantanément ?",
+    "Quelle est la chose la plus troublante qu’on t’ait dite ?",
+    "Tu aimes qu’on prenne les devants, ou c’est toi qui aimes mener ?",
+    "Plutôt tendresse, intensité, ou passer de l’une à l’autre ?",
+    //"Qu’est-ce qui rend un baiser inoubliable pour toi ?",
+    "Quel est le geste le plus anodin qui peut te troubler ?",
+    "Où aimes-tu le plus être touchée, en dehors des endroits évidents ?",
+    "Quel est ton plus beau souvenir sensuel, sans forcément entrer dans les détails ?",
+    "Qu’est-ce qui te paraît plus intime que faire l’amour ?",
+    "Qu’as-tu découvert sur ton propre désir avec les années ?",
+    "Ton désir est-il différent avec une femme et avec un homme ?",
+    "Qu’aimerais-tu qu’un homme comprenne enfin sur le désir d’une femme ?",
+    "Y a-t-il un fantasme qui t’accompagne depuis longtemps ? Tu peux n’en dire qu’une partie.",
+    "Y a-t-il quelque chose que tu as toujours rêvé de vivre, sans jamais oser le dire ?",
+    //"Quelle est ta limite, celle que personne ne doit franchir ?",
+    "Comment aimes-tu qu’on te demande si tu as envie ?",
+    "Qu’est-ce qui te permet de lâcher prise complètement ?",
+    //"Tu arrives à dire facilement ce que tu aimes, au lit ?",
+    "Qu’est-ce que tu aimes qu’on te murmure ?",
+    "Ton moment préféré pour faire l’amour : le matin, la nuit, ou quand on ne s’y attend pas ?",
+    //"Le décor idéal pour un premier baiser ?",
+    "Qu’est-ce qui te fait te sentir belle ?",
+    "Qu’est-ce qui t’attire chez moi, physiquement ?",
+    "As-tu déjà imaginé comment ce serait, entre nous ?",
+    "Qu’aimerais-tu que je sache de toi avant qu’on soit plus proches ?",
+    "À quoi penses-tu, là, maintenant ?",
+    //"Si je t’embrassais maintenant, tu ferais quoi ?",
+    {s:1, t:"Regardez-vous dans les yeux sans parler : le premier qui rit ou détourne le regard pose la prochaine question."},
+    //{s:1, t:"Chacun écrit sur son téléphone un mot qui évoque le désir, puis on les révèle en même temps."},
+    //{s:1, t:"Dis-moi un compliment sur moi que tu ne m’as encore jamais fait."},
+    //{s:1, t:"Retournement : pose-moi la question la plus intime que tu oses. Je réponds franchement."},
+    {s:1, t:"Pause : on continue, ou on garde la suite pour une autre fois ?"}
+  ]
+};
+
+const META = {
+  decouverte:{name:"Découverte", emoji:"🌿", ink:"--meadow-ink"},
+  profondeur:{name:"Profondeur", emoji:"🌊", ink:"--lake-ink"},
+  complicite:{name:"Complicité", emoji:"🌹", ink:"--wine-ink"},
+  melange:{name:"Mélange", emoji:"🎲", ink:"--leather-ink"},
+  intimite:{name:"Intimité", emoji:"🕯️", ink:"--plum-ink"}
+};
+
+const CARDS = [];
+for (const k of ["decouverte","profondeur","complicite","intimite"]) {
+  RAW[k].forEach((c, i) => {
+    const o = typeof c === "string" ? {t:c} : c;
+    CARDS.push({id:k + "-" + (i + 1), deck:k, n:i + 1, t:o.t, s:!!o.s});
+  });
+}
+
+const KEY = "acoeur-used-v5";
+let used = new Set();
+try { const v = localStorage.getItem(KEY); if (v) used = new Set(JSON.parse(v)); } catch (e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify([...used])); } catch (e) {} }
+
+let deck = "decouverte";
+try { const d = localStorage.getItem(KEY + "-deck"); if (d && META[d]) deck = d; } catch (e) {}
+let current = null;
+let busy = false;
+
+const $ = s => document.querySelector(s);
+const cardEl = $("#card"), frontEl = $("#front"), qEl = $("#q"), tagEl = $("#tag"), numEl = $("#num");
+const leftEl = $("#left"), drawBtn = $("#draw"), passBtn = $("#pass"), resetBtn = $("#reset");
+const backDeck = $("#backDeck"), actions = $("#actions"), deckwrap = $("#deckwrap");
+
+function inDeck(c, d){ return (d === "melange" && c.deck !== "intimite") || c.deck === d; }
+function pool(d){ return CARDS.filter(c => inDeck(c, d) && !used.has(c.id)); }
+function total(d){ return CARDS.filter(c => inDeck(c, d)).length; }
+function fr(t){ return t.replace(/ ([?!:;»])/g, "\u00A0$1").replace(/« /g, "«\u00A0"); }
+
+function update(){
+  const left = pool(deck).length;
+  document.querySelectorAll(".chip").forEach(b => {
+    const d = b.dataset.deck, p = pool(d).length;
+    b.querySelector(".ct").textContent = (d === "intimite" && !unlocked) ? "🔒 S’ouvre seulement à deux" : p + " sur " + total(d) + " cartes";
+  });
+  leftEl.textContent = left === 0 ? "Plus aucune carte dans ce paquet" : (left === 1 ? "1 carte restante" : left + " cartes restantes");
+  if (left === 0) drawBtn.textContent = current ? "Terminer le paquet" : "Mélanger à nouveau";
+  else drawBtn.textContent = current ? "Carte suivante" : "Tirer une carte";
+  passBtn.hidden = !current;
+  actions.classList.toggle("two", !!current);
+  deckwrap.dataset.left = left > 2 ? "many" : (left > 0 ? "few" : "none");
+  cardEl.setAttribute("aria-label", cardEl.classList.contains("flipped") ? "Carte retournée" : "Tirer une carte");
+}
+
+function fill(c){
+  const m = META[c.deck];
+  frontEl.classList.toggle("special", c.s);
+  tagEl.textContent = c.s ? "✨ Carte spéciale" : m.emoji + " " + m.name;
+  tagEl.style.color = c.s ? "var(--deck-ink)" : "var(" + m.ink + ")";
+  qEl.textContent = fr(c.t);
+  qEl.classList.toggle("long", c.t.length > 100);
+  numEl.textContent = "n° " + c.n;
+}
+
+function flipTo(fn){
+  busy = true;
+  const run = () => { fn(); cardEl.classList.add("flipped"); update(); setTimeout(() => { busy = false; }, 620); };
+  if (cardEl.classList.contains("flipped")) { cardEl.classList.remove("flipped"); setTimeout(run, 430); }
+  else run();
+}
+
+function draw(excludeId){
+  if (busy) return;
+  let p = pool(deck);
+  if (excludeId && p.length > 1) p = p.filter(c => c.id !== excludeId);
+  if (!p.length) { showEmpty(); return; }
+  const c = p[Math.floor(Math.random() * p.length)];
+  used.add(c.id); save();
+  flipTo(() => { fill(c); current = c; });
+}
+
+function showEmpty(){
+  flipTo(() => {
+    frontEl.classList.remove("special");
+    tagEl.textContent = "🎉 Paquet terminé";
+    tagEl.style.color = "var(--deck-ink)";
+    qEl.textContent = fr("Vous avez fait le tour de ce paquet ! Choisissez-en un autre, ou mélangez celui-ci à nouveau.");
+    qEl.classList.remove("long");
+    numEl.textContent = "";
+    current = null;
+  });
+}
+
+function reshuffle(){
+  if (busy) return;
+  CARDS.forEach(c => { if (inDeck(c, deck)) used.delete(c.id); });
+  save();
+  current = null;
+  cardEl.classList.remove("flipped");
+  update();
+}
+
+function primary(){
+  if (busy) return;
+  if (pool(deck).length === 0) { current ? showEmpty() : reshuffle(); return; }
+  draw();
+}
+
+function pass(){
+  if (!current || busy) return;
+  used.delete(current.id); save();
+  draw(current.id);
+}
+
+function setDeck(d){
+  if (busy) return;
+  deck = d;
+  document.body.dataset.deck = d;
+  try { localStorage.setItem(KEY + "-deck", d); } catch (e) {}
+  current = null;
+  cardEl.classList.remove("flipped");
+  backDeck.textContent = META[d].name;
+  document.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", b.dataset.deck === d ? "true" : "false"));
+  if (d !== "intimite") lastNormal = d;
+  showGate(d === "intimite" && !unlocked);
+  update();
+}
+
+document.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => setDeck(b.dataset.deck)));
+drawBtn.addEventListener("click", primary);
+passBtn.addEventListener("click", pass);
+cardEl.addEventListener("click", () => { if (!cardEl.classList.contains("flipped")) primary(); });
+cardEl.addEventListener("keydown", e => {
+  if ((e.key === "Enter" || e.key === " ") && !cardEl.classList.contains("flipped")) { e.preventDefault(); primary(); }
+});
+
+const rules = $("#rules"), rulesPanel = $("#rulesPanel");
+rules.addEventListener("toggle", () => { rulesPanel.hidden = !rules.open; });
+
+let armTimer = null;
+resetBtn.addEventListener("click", () => {
+  if (!resetBtn.classList.contains("armed")) {
+    resetBtn.classList.add("armed");
+    resetBtn.textContent = "Touche encore pour tout remettre";
+    armTimer = setTimeout(() => { resetBtn.classList.remove("armed"); resetBtn.textContent = "Remettre toutes les cartes"; }, 3500);
+    return;
+  }
+  clearTimeout(armTimer);
+  used = new Set(); save();
+  resetBtn.classList.remove("armed");
+  resetBtn.textContent = "Remettre toutes les cartes";
+  current = null;
+  cardEl.classList.remove("flipped");
+  update();
+});
+
+// Paquet Intimité : s’ouvre seulement quand les deux personnes ont donné leur accord (pour cette partie uniquement)
+const gate = $("#gate"), stage = $("#stage"), consentBtns = [...document.querySelectorAll(".consent")];
+let unlocked = false, lastNormal = "decouverte";
+function showGate(on){
+  gate.hidden = !on; stage.hidden = on; leftEl.hidden = on; actions.hidden = on;
+  if (on) consentBtns.forEach(b => { b.setAttribute("aria-pressed", "false"); b.textContent = "Je suis d’accord"; });
+}
+consentBtns.forEach(b => b.addEventListener("click", () => {
+  const on = b.getAttribute("aria-pressed") !== "true";
+  b.setAttribute("aria-pressed", on ? "true" : "false");
+  b.textContent = on ? "✓ D’accord" : "Je suis d’accord";
+  if (consentBtns.every(x => x.getAttribute("aria-pressed") === "true")) {
+    unlocked = true;
+    setTimeout(() => { showGate(false); update(); }, 500);
+  }
+}));
+$("#gateBack").addEventListener("click", () => setDeck(lastNormal));
+
+setDeck(deck);
+</script>
+</body>
+</html>
